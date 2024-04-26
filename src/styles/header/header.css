@@ -1,15 +1,12 @@
-
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-}
-
-header {
-    background-color: #333;
-    color: #fff;
+.container-header {
+    background-color: var(--primary);
+    color: var(--white);
     padding: 10px 0;
     text-align: center;
+    display: flex;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
 }
 
 .logo {
@@ -18,19 +15,19 @@ header {
     text-transform: uppercase;
 }
 
-nav {
+.items {
     display: flex;
     justify-content: center;
     margin-top: 10px;
 }
 
-nav a {
-    color: #fff;
+.items a {
+    color: var(--white);
     text-decoration: none;
     padding: 0 15px;
     transition: color 0.3s ease;
 }
 
-nav a:hover {
-    color: #ffd700;
+.items a:hover {
+    color: var(--success);
 }
