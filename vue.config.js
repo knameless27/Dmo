@@ -10,6 +10,7 @@ module.exports = defineConfig({
         'components': path.resolve(__dirname, 'src/components'), // Alias para la carpeta de componentes
         'api': path.resolve(__dirname, 'src/api'), // Alias para la carpeta de API
         'styles': path.resolve(__dirname, 'src/styles'), // Alias para la carpeta de styles
+        'assets': path.resolve(__dirname, 'src/assets'), // Alias para la carpeta de styles
         // Puedes agregar más alias según sea necesario
       }
     }

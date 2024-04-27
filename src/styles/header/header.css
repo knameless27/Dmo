@@ -1,12 +1,13 @@
 .container-header {
     background-color: var(--primary);
     color: var(--white);
-    padding: 10px 0;
+    padding: 10px 10px;
     text-align: center;
     display: flex;
     justify-content: space-between;
     position: sticky;
     top: 0;
+    z-index: 1000;
 }
 
 .logo {
@@ -26,6 +27,7 @@
     text-decoration: none;
     padding: 0 15px;
     transition: color 0.3s ease;
+    cursor: pointer;
 }
 
 .items a:hover {
