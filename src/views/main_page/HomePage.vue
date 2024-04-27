@@ -6,11 +6,7 @@
                 <p>
                     Our team of experts is ready to create your new image.
                 </p>
-                <button class="primary block">{{ $t("bookNow") }}!</button>
-                <div style="position:absolute; color: white; bottom: 20%; padding: 0 9%">
-                    Read more
-                    <div v-html="arrowDown" style="background-color: white; width: 40px; height: 40px" />
-                </div>
+                <button class="primary block" @click="bookApp">{{ $t("bookNow") }}!</button>
             </hgroup>
         </section>
         <section class="info">
@@ -26,11 +22,14 @@
 </template>
 
 <script>
-import arrowDown from "assets/arrow-down.svg"
 export default {
     data() {
         return {
-            arrowDown: arrowDown.default
+        }
+    },
+    methods: {
+        bookApp() {
+            this.$router.push("/book_appointment")
         }
     }
 }
