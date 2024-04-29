@@ -1,6 +1,7 @@
 :root {
   --white: #f7f6f9;
   --bg-dark: #303348;
+  --bg-card: #464a66;
   --secondary: #e4e3f4;
   --primary: #7367f0;
   --info: #3baee0;
@@ -15,6 +16,7 @@ body {
   margin: 0;
   padding: 0;
   background-color: var(--bg-dark);
+  color: var(--white);
 }
 
 button {
@@ -27,12 +29,12 @@ button {
   cursor: pointer;
 }
 
-.block { 
+.b-block {
   width: 100%;
   padding: 3% 0;
 }
 
-.primary {
+.b-primary {
   background-color: var(--primary) !important;
   color: var(--white) !important;
 }

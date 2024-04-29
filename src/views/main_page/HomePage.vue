@@ -6,23 +6,54 @@
                 <p>
                     Our team of experts is ready to create your new image.
                 </p>
-                <button class="primary block" @click="bookApp">{{ $t("bookNow") }}!</button>
+                <button class="b-primary b-block" @click="bookApp">{{ $t("bookNow") }}!</button>
             </hgroup>
         </section>
-        <section class="info">
-            references or trabajos hechos
+        <section class="references">
+            <h1>References owo</h1>
+            <div class="card-references">
+                <MainCard img="https://m.media-amazon.com/images/I/41510HcTISL._UXNaN_FMjpg_QL85_.jpg" vertical
+                    title="waos">
+                    waos 1
+                </MainCard>
+                <MainCard img="https://m.media-amazon.com/images/I/41510HcTISL._UXNaN_FMjpg_QL85_.jpg" vertical
+                    title="waos">
+                    waos 2
+                </MainCard>
+                <MainCard img="https://m.media-amazon.com/images/I/41510HcTISL._UXNaN_FMjpg_QL85_.jpg" vertical
+                    title="waos">
+                    waos 3
+                </MainCard>
+            </div>
         </section>
         <section class="info">
-            frequently asked questions
+            <h1>frequently asked questions</h1>
+            <MainDetails class="summaries" title="titulos">content</MainDetails>
+            <MainDetails class="summaries" title="titulos">content</MainDetails>
+            <MainDetails class="summaries" title="titulos">content</MainDetails>
         </section>
-        <section class="info">
-            payment
+        <section class="contact">
+            <h1>You can find us here!</h1>
+            <div class="map" style="width: 600px; height: 300px; background-color: white"></div>
+        </section>
+        <section class="contact">
+            <h1>Contact us</h1>
+            <input type="text" placeholder="Subject">
+            <input type="text" placeholder="Write your message here">
+            <button>send</button>
         </section>
     </main>
 </template>
 
 <script>
+import MainCard from '@/components/MainCard.vue';
+import MainDetails from '@/components/MainDetails.vue';
+
 export default {
+    components: {
+        MainCard,
+        MainDetails
+    },
     data() {
         return {
         }
@@ -46,8 +77,10 @@ export default {
 }
 
 .info {
-    color: var(--primary);
+    color: var(--white);
     background-color: var(--bg-dark);
+    margin: 1%;
+    padding-top: 3%;
 }
 
 .box {
@@ -57,5 +90,25 @@ export default {
     max-width: 450px;
     background-color: rgba(0, 0, 0, 0.767);
     box-shadow: 0px 0px 15px 58px rgba(0, 0, 0, 0.767);
+}
+
+.references h1 {
+    margin-left: 1%;
+}
+
+.card-references {
+    display: flex;
+    justify-content: center;
+    gap: 2%;
+    align-items: center;
+}
+
+.summaries {
+    margin-top: 1%;
+}
+
+.contact {
+    margin: 1%;
+    padding-top: 3%;
 }
 </style>
