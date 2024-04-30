@@ -1,0 +1,35 @@
+.container-footer {
+    background-color: var(--bg-dark);
+    color: var(--white);
+    padding: 10px 10px;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.items {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.items a {
+    color: var(--white);
+    text-decoration: none;
+    padding: 0 15px;
+    transition: color 0.3s ease;
+    cursor: pointer;
+}
+
+.items a:hover {
+    color: var(--success);
+}

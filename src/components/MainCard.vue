@@ -46,6 +46,7 @@ export default {
 
 ._card img {
     width: v-bind(fullWidthImg);
+    max-width: 500px;
     border-radius: v-bind(radiusImg);
 }
 
@@ -54,5 +55,6 @@ export default {
     align-items: start;
     padding-inline: 3%;
     padding-bottom: 2%;
+    margin-top: 1%;
 }
 </style>

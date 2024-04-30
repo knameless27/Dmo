@@ -31,10 +31,27 @@ button {
 
 .b-block {
   width: 100%;
-  padding: 3% 0;
+  padding: 1rem 0;
 }
 
 .b-primary {
   background-color: var(--primary) !important;
   color: var(--white) !important;
+}
+
+input, textarea {
+  padding: 1rem;
+  color: var(--bg-dark);
+  background-color: var(--white);
+  border-radius: 15px 15px;
+  border: 0;
+  border: 1px solid var(--bg-card);
+  font-family: Outfit, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol" !important;
+}
+
+input:focus, textarea:focus {
+  border: 1px solid var(--info);
+  outline: none;
 }
