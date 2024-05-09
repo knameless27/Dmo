@@ -29,6 +29,25 @@ button {
   cursor: pointer;
 }
 
+button:hover {
+  color: var(--info);
+}
+.p-3 {
+  padding: 3vw;
+}
+.ptb-1 {
+  padding-top: 1vh;
+  padding-bottom: 1vh;
+}
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--info);
+}
+
 .b-block {
   width: 100%;
   padding: 1rem 0;
@@ -39,7 +58,8 @@ button {
   color: var(--white) !important;
 }
 
-input, textarea {
+input,
+textarea {
   padding: 1rem;
   color: var(--bg-dark);
   background-color: var(--white);
@@ -51,7 +71,9 @@ input, textarea {
     "Segoe UI Symbol" !important;
 }
 
-input:focus, textarea:focus {
+
+input:focus,
+textarea:focus {
   border: 1px solid var(--info);
   outline: none;
 }

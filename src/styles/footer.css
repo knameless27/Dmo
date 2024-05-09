@@ -5,8 +5,8 @@
     text-align: center;
     display: flex;
     justify-content: space-between;
-    position: sticky;
-    top: 0;
+    position: static;
+    bottom: 0;
     z-index: 1000;
 }
 

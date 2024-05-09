@@ -1,6 +1,6 @@
 <template>
   <MainHeader />
-  <router-view />
+  <router-view class="__main-content" />
   <MainFooter />
 </template>
 
@@ -19,4 +19,10 @@ export default {
 
 <style>
 @import "styles/main.css";
+
+.__main-content {
+  display: flex;
+  flex-direction: column;
+  min-height: 89vh;
+}
 </style>
