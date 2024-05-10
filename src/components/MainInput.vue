@@ -4,7 +4,7 @@
         <div class="__input-main">
             <input :type="validateType()" :placeholder="placeholder" :value="tempValue"
                 @input="$emit('update:modelValue', $event.target.value)">
-            <Icon :style="`display: ${layoutButton}; font-size: 200px`" v-if="type == 'password'" icon="mdi:eye"
+            <Icon :style="`display: ${layoutButton}; font-size: 200px; cursor: pointer`" v-if="type == 'password'" icon="mdi:eye"
                 @click="seePassword" />
         </div>
     </div>
@@ -42,7 +42,7 @@ export default {
     data() {
         return {
             pwdBool: false,
-            tempValue: "",
+            phone: "",
             layoutButton: this.type == "password" ? "" : "none"
         }
     },
@@ -51,8 +51,27 @@ export default {
             this.validateType()
         },
         modelValue() {
-            this.tempValue = this.modelValue
+            this.phone = this.modelValue
         }
+    },
+    computed: {
+        tempValue: {
+            get() {
+                let phone = this.phone;
+                if (phone && this.type == "telephone") {
+                    phone = phone.toString().replace(/\D/g, "");
+                    const match = phone.match(/^(\d{1,3})(\d{0,3})(\d{0,4})$/);
+                    if (match) {
+                        phone = `(${match[1]}${match[2] ? "" : ""}) ${match[2]}${match[3] ? "-" : ""
+                            }${match[3]}`;
+                    }
+                }
+                return phone;
+            },
+            set(val) {
+                this.phone = val;
+            },
+        },
     },
     methods: {
         seePassword() {
@@ -61,8 +80,8 @@ export default {
         validateType() {
             if (this.type != 'password') return this.type
             if (this.pwdBool) {
-                this.tempValue = this.modelValue
-                this.$emit('update:modelValue', this.tempValue)
+                this.phone = this.modelValue
+                this.$emit('update:modelValue', this.phone)
                 return 'text'
             }
             return this.type

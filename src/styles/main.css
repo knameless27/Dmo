@@ -3,6 +3,7 @@
   --bg-dark: #303348;
   --bg-card: #464a66;
   --secondary: #e4e3f4;
+  --secondary-dark: #c2c0d6;
   --primary: #7367f0;
   --info: #3baee0;
   --danger: #f2393b;
@@ -32,13 +33,37 @@ button {
 button:hover {
   color: var(--info);
 }
+
+button:active {
+  color: var(--primary);
+  background-color: var(--secondary-dark);
+}
+
 .p-3 {
   padding: 3vw;
 }
+
 .ptb-1 {
   padding-top: 1vh;
   padding-bottom: 1vh;
 }
+
+.pt-1 {
+  padding-top: 1vh;
+}
+
+.mb-1 {
+  margin-bottom: 1vh;
+}
+
+.ml-1 {
+  margin-left: 1vw;
+}
+
+.mr-1 {
+  margin-right: 1vw;
+}
+
 a {
   color: var(--primary);
   text-decoration: none;
@@ -70,7 +95,6 @@ textarea {
     Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
     "Segoe UI Symbol" !important;
 }
-
 
 input:focus,
 textarea:focus {
