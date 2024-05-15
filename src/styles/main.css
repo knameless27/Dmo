@@ -6,8 +6,13 @@
   --secondary-dark: #c2c0d6;
   --primary: #7367f0;
   --info: #3baee0;
-  --danger: #f2393b;
+  --danger: #fa69ac;
+  /* --danger: #f2393b; */
   --success: #28c76f;
+}
+
+a {
+  cursor: pointer;
 }
 
 body {
@@ -75,12 +80,18 @@ a:hover {
 
 .b-block {
   width: 100%;
+  cursor: pointer;
   padding: 1rem 0;
 }
 
 .b-primary {
   background-color: var(--primary) !important;
   color: var(--white) !important;
+  cursor: pointer;
+}
+
+.text-danger {
+  color: var(--danger);
 }
 
 input,

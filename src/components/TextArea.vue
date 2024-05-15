@@ -1,7 +1,9 @@
 <template>
     <div style="display: flex; flex-direction: column">
         <b v-if="title">{{ title }}</b>
-        <textarea type="text" :rows="rows" :columns="columns" :placeholder="placeholder" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" />
+        <textarea type="text" :rows="rows" :columns="columns" :placeholder="placeholder" :value="modelValue"
+            @input="$emit('update:modelValue', $event.target.value)" />
+        <small class="text-danger">{{ errors }}</small>
     </div>
 </template>
 <script>
@@ -11,6 +13,10 @@ export default {
             default: "",
             required: false,
             type: String
+        },
+        errors: {
+            type: String,
+            required: false,
         },
         placeholder: {
             default: "",

@@ -1,5 +1,7 @@
 .container-footer {
-    background-color: var(--bg-dark);
+    background-color: red;
+    /* background-color: var(--bg-dark); */
+    mask-image: linear-gradient(transparent, black 30%);
     color: var(--white);
     padding: 10px 10px;
     text-align: center;

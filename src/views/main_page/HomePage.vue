@@ -6,7 +6,7 @@
                 <p>
                     Our team of experts is ready to create your new image.
                 </p>
-                <button class="b-primary b-block" @click="bookApp">{{ $t("bookNow") }}!</button>
+                <button class="b-primary b-block" @click="bookApp()">{{ $t("bookNow") }}!</button>
             </hgroup>
         </section>
         <section class="references">
@@ -90,7 +90,6 @@ export default {
 
 <style scoped>
 .first-view {
-    z-index: -1;
     height: 93vh;
     display: flex;
     flex-direction: column;

@@ -7,6 +7,7 @@ import EN from "@/lang/en.json"
 import FR from "@/lang/fr.json"
 import ToastPlugin from "vue-toast-notification";
 import 'vue-toast-notification/dist/theme-bootstrap.css';
+import "core/validations/validations.js"
 
 const i18n = createI18n({
   locale: localStorage.getItem("locale"),
