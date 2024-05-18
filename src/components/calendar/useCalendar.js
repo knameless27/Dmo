@@ -1,9 +1,11 @@
+/* eslint-disable */
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import listPlugin from "@fullcalendar/list";
 import interactionPlugin from "@fullcalendar/interaction";
+import apmntService from "api/appointment/index.js";
 import { useToast } from "vue-toast-notification";
-import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { storeCalendar } from "store/defaultCalendar/main.js";
 
 export default function userCalendar() {
@@ -11,38 +13,6 @@ export default function userCalendar() {
   const toast = useToast();
   const refCalendar = ref(null);
   let calendarApi = null;
-
-  const handleRightClick = (event) => {
-    event.preventDefault();
-    console.log(event);
-    const calendarEl = event.target.closest(".fc-daygrid-day"); // Ajusta el selector según tu estructura
-    if (calendarEl) {
-      const dateStr = calendarEl.getAttribute("data-date");
-      alert("Hiciste clic derecho en la fecha: " + dateStr);
-    }
-  };
-
-  onMounted(() => {
-    calendarApi = refCalendar.value.getApi();
-    console.log(calendarOptions);
-    const calendarEl = refCalendar.value.$el;
-    calendarEl.addEventListener("contextmenu", handleRightClick);
-    console.log("calendar api ", calendarApi);
-  });
-
-  onBeforeUnmount(() => {
-    const calendarEl = refCalendar.value.$el;
-    calendarEl.removeEventListener("contextmenu", handleRightClick);
-  });
-
-  const calendarsColor = {
-    Business: "primary",
-    Holiday: "success",
-    Personal: "danger",
-    Family: "warning",
-    ETC: "info",
-  };
-
   const blankEvent = {
     title: "",
     start: "",
@@ -57,6 +27,19 @@ export default function userCalendar() {
     },
   };
   const event = ref(JSON.parse(JSON.stringify(blankEvent)));
+
+  onMounted(() => {
+    calendarApi = refCalendar.value.getApi();
+  });
+
+  const calendarsColor = {
+    Business: "primary",
+    Holiday: "success",
+    Personal: "danger",
+    Family: "warning",
+    ETC: "info",
+  };
+
   const clearEventData = () => {
     event.value = JSON.parse(JSON.stringify(blankEvent));
   };
@@ -169,36 +152,69 @@ export default function userCalendar() {
   // watch(selectedCalendars, () => {
   //   refetchEvents();
   // });
+  function getRandomColor() {
+    const letters = "0123456789ABCDEF";
+    let color = "#";
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  }
 
-  const fetchEvents = (info, successCallback) => {
+  const increaseHourByOne = (dateString) => {
+    const date = new Date(dateString);
+    date.setHours(date.getHours() + 1);
+    return date;
+  };
+
+  function remakeAppointments(data) {
+    const newData = data.map((app) => {
+      return {
+        appointment: app,
+        id: app.id,
+        title: app.user.full_name,
+        start: new Date(app.date),
+        end: increaseHourByOne(app.date),
+        color: getRandomColor()
+      };
+    });
+    return newData;
+  }
+
+  const fetchEvents = async (info, successCallback) => {
     if (!info) return;
-    successCallback([
-      {
-        allDay: true,
-        id: "waos",
-        title: "all dei",
-        start: "2024-05-17 10:00:00",
-        end: "2024-05-18 10:00:00",
-      },
-      {
-        id: "waos",
-        title: "super waos",
-        start: "2024-05-17 10:00:00",
-        end: "2024-05-18 10:00:00",
-      },
-      {
-        id: "waos",
-        title: "super waos",
-        start: "2024-05-17 10:00:00",
-        end: "2024-05-18 10:00:00",
-      },
-      {
-        id: "waos",
-        title: "super waos",
-        start: "2024-05-17 10:00:00",
-        end: "2024-05-18 10:00:00",
-      },
-    ]);
+
+    const response = await apmntService.getAppointments(25);
+    const newData = remakeAppointments(response.data.data);
+    successCallback(newData);
+    console.log(newData);
+    // successCallback([
+    //   {
+    //     allDay: true,
+    //     id: "waos",
+    //     title: "all dei",
+    //     start: "2024-05-17 11:00:00",
+    //     end: "2024-05-18 10:00:00",
+    //   },
+    //   {
+    //     id: "waos",
+    //     title: "super waos",
+    //     start: "2024-05-17 12:00:00",
+    //     end: "2024-05-18 10:00:00",
+    //   },
+    //   {
+    //     id: "waos",
+    //     title: "super waos",
+    //     start: "2024-05-17 13:00:00",
+    //     end: "2024-05-18 10:00:00",
+    //   },
+    //   {
+    //     id: "waos",
+    //     title: "super waos",
+    //     start: "2024-05-17 14:00:00",
+    //     end: "2024-05-18 10:00:00",
+    //   },
+    // ]);
     // store
     //   .dispatch("calendar/fetchEvents", {
     //     calendars: selectedCalendars.value,
@@ -222,7 +238,7 @@ export default function userCalendar() {
     editable: true,
     eventResizableFromStart: true,
     dragScroll: true,
-    dayMaxEvents: 2,
+    dayMaxEvents: 25,
     navLinks: true,
     businessHours: {
       // Specify business hours for different days of the week
@@ -255,18 +271,16 @@ export default function userCalendar() {
       ];
     },
     eventClick({ event: clickedEvent }) {
-      console.log(clickedEvent);
       event.value = grabEventDataFromEventApi(clickedEvent);
 
-      isEventHandlerSidebarActive.value = true;
+      isModalActive.value = !isModalActive.value;
     },
 
     customButtons: {
       sidebarToggle: {
         text: "sidebar",
         click() {
-          isCalendarOverlaySidebarActive.value =
-            !isCalendarOverlaySidebarActive.value;
+          isModalActive.value = !isModalActive.value;
         },
       },
     },
@@ -276,7 +290,7 @@ export default function userCalendar() {
       event.value = JSON.parse(
         JSON.stringify(Object.assign(event.value, { start: info.date }))
       );
-      isEventHandlerSidebarActive.value = true;
+      isModalActive.value = !isModalActive.value;
     },
 
     eventDrop({ event: droppedEvent }) {
@@ -291,12 +305,11 @@ export default function userCalendar() {
     rerenderDelay: 350,
   });
 
-  const isEventHandlerSidebarActive = ref(false);
-  const isCalendarOverlaySidebarActive = ref(false);
+  const isModalActive = ref(false);
 
   return {
     refCalendar,
-    isCalendarOverlaySidebarActive,
+    isModalActive,
     calendarOptions,
     event,
     clearEventData,
@@ -305,6 +318,5 @@ export default function userCalendar() {
     removeEvent,
     refetchEvents,
     fetchEvents,
-    isEventHandlerSidebarActive,
   };
 }

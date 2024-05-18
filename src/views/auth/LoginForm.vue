@@ -58,6 +58,7 @@ import auth from "api/auth/index.js"
 import { userCreds } from "auth_store/main.js"
 import { Form } from 'vee-validate';
 import { validatePhone } from "mix/MainMixin.js"
+import pinia from "core/pinia.js";
 
 export default {
     components: {
@@ -79,7 +80,7 @@ export default {
             },
             login: true,
             loading: false,
-            Store: userCreds()
+            Store: userCreds(pinia)
         }
     },
     methods: {
@@ -103,7 +104,8 @@ export default {
                 if (!data.original) return this.$toast.open({ message: "unexpected error", type: "error" })
                 this.Store.newCreds(data.original)
                 this.$router.push('/book_appointment')
-            }).catch(() => {
+            }).catch((e) => {
+                console.log(e);
                 this.loading = !this.loading
                 this.$toast.open({ message: "unexpected error", type: "error" });
             })

@@ -7,6 +7,7 @@
 <script>
 import FullCalendar from '@fullcalendar/vue3'
 import useCalendar from './useCalendar'
+import { watch, defineEmits } from 'vue'
 
 export default {
   components: {
@@ -19,10 +20,11 @@ export default {
       default: "",
     }
   },
-  setup() {
+  setup(_, { emit }) {
+    defineEmits(["isModalActive", "dayData"])
     const {
       refCalendar,
-      isCalendarOverlaySidebarActive,
+      isModalActive,
       event,
       clearEventData,
       addEvent,
@@ -38,9 +40,14 @@ export default {
 
     fetchEvents()
 
+    watch(isModalActive, () => {
+      emit("dayData", event)
+      emit("isModalActive", isModalActive.value)
+    })
+
     return {
       refCalendar,
-      isCalendarOverlaySidebarActive,
+      isModalActive,
       event,
       clearEventData,
       addEvent,
@@ -48,7 +55,6 @@ export default {
       removeEvent,
       refetchEvents,
       calendarOptions,
-
       // ----- UI ----- //
       isEventHandlerSidebarActive,
     }
