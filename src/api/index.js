@@ -1,21 +1,30 @@
 import axios from "axios";
-import pinia from "core/pinia.js";
-import { userCreds } from "auth_store/main.js";
+import { getToken } from "auth_store/main.js";
 
 const backUrl = process.env.VUE_APP_BACK_URL;
 
-const defaultMethod = async ({ data, method, endpoint }) => {
-  const store = userCreds(pinia);
+const defaultMethod = async ({ data, method, endpoint, id }) => {
+
+  function getEndUrl(method, data, id) {
+    if (method == "get") return `/${data}`;
+    if (method == "put") return `/${id}`;
+    return "";
+  }
 
   try {
-    const url = `${backUrl}${endpoint}${method === "get" ? `/${data}` : ""}`;
+    console.log(getToken())
+    const url = `${backUrl}${endpoint}${getEndUrl(method, data, id)}`;
     const config = {
       headers: {
-        Authorization: `Bearer ${store.creds.token}`,
+        // Authorization: `Bearer ${store.creds.token}`,
       },
     };
 
-    const response = await axios[method](url, method === "get" ? config : data, config);
+    const response = await axios[method](
+      url,
+      method === "get" ? config : data,
+      config
+    );
     return response.data;
   } catch (error) {
     console.log(error.message ? error.message : error);

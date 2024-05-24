@@ -2,7 +2,7 @@
     <div class="__input-layout">
         <b v-if="title">{{ title }}</b>
         <div class="__input-main">
-            <Field :type="validateType()" :name="name" :value="phone"
+            <Field :ref="`${title}-input`" :type="validateType()" :name="name" :value="phone"
                 @input="$emit('update:modelValue', $event.target.value)" :rules="rules" />
             <small class="text-danger">{{ errors }}</small>
             <div v-if="type == 'password'">

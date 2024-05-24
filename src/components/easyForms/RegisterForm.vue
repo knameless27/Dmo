@@ -9,6 +9,7 @@
                     rules="required" />
                 <MainInput class="ptb-1" type="password" title="Password" name="password" :errors="errors.password"
                     rules="required" />
+                <MainInput class="ptb-1" v-if="time" type="time" title="Time" name="time" :errors="errors.time" rules="required" />
             </div>
             <div>
                 <MainInput class="ptb-1" type="text" title="Lastname" name="lastname" :errors="errors.lastname"
@@ -34,16 +35,22 @@
 import MainInput from "components/MainInput.vue"
 import MainLoader from "@/components/MainLoader.vue"
 import auth from "api/auth/index.js"
-import { userCreds } from "auth_store/main.js"
+import { setToken } from "auth_store/main.js"
 import { Form } from 'vee-validate';
 import { validatePhone } from "mix/MainMixin.js"
-import pinia from "core/pinia.js";
 
 export default {
     components: {
         MainInput,
         MainLoader,
         Form,
+    },
+    props: {
+        time: {
+            default: false,
+            required: false,
+            type: Boolean
+        }
     },
     data() {
         return {
@@ -55,10 +62,10 @@ export default {
                 telephone: "",
                 identification: "",
                 address: "",
+                time: "",
             },
             login: true,
             loading: false,
-            Store: userCreds(pinia)
         }
     },
     methods: {
@@ -80,7 +87,8 @@ export default {
                 this.loading = !this.loading
                 if (!data.original) return this.$toast.open({ message: "unexpected error", type: "error" })
                 this.$toast.open({ message, type: status });
-                this.Store.newCreds(data.original)
+                setToken(data.original)
+                data.original.user.time = newForm.time
                 this.$emit("successRegister", data.original.user)
             }).catch(() => {
                 this.loading = !this.loading

@@ -18,7 +18,17 @@ const getAppointments = (data) => {
   }
 };
 
+const editAppointments = (data, id) => {
+  try {
+    return defaultMethod({ data, method: "put", endpoint: "appointment", id });
+  } catch (error) {
+    console.log(error.message ? error.message : error);
+    return { status: "VALIDATION", message: "Unexpected Error!" };
+  }
+};
+
 export default {
   createAppointment,
   getAppointments,
+  editAppointments
 };

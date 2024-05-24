@@ -4,13 +4,12 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import listPlugin from "@fullcalendar/list";
 import interactionPlugin from "@fullcalendar/interaction";
 import apmntService from "api/appointment/index.js";
-import { useToast } from "vue-toast-notification";
 import { ref, computed, onMounted } from "vue";
+import { formatDate } from "mix/MainMixin.js";
 import { storeCalendar } from "store/defaultCalendar/main.js";
 
 export default function userCalendar() {
   const store = storeCalendar();
-  const toast = useToast();
   const refCalendar = ref(null);
   let calendarApi = null;
   const blankEvent = {
@@ -49,30 +48,33 @@ export default function userCalendar() {
     propsToUpdate,
     extendedPropsToUpdate
   ) => {
-    toast({ message: "Event Updated", type: "success" });
-
     const existingEvent = calendarApi.getEventById(updatedEventData.id);
 
     for (let index = 0; index < propsToUpdate.length; index++) {
       const propName = propsToUpdate[index];
-      existingEvent.setProp(propName, updatedEventData[propName]);
+      try {
+        existingEvent.setProp(propName, updatedEventData[propName]);
+      } catch (error) {
+        console.log(error);
+      }
     }
 
     existingEvent.setDates(updatedEventData.start, updatedEventData.end, {
       allDay: updatedEventData.allDay,
     });
 
-    for (let index = 0; index < extendedPropsToUpdate.length; index++) {
-      const propName = extendedPropsToUpdate[index];
-      existingEvent.setExtendedProp(
-        propName,
-        updatedEventData.extendedProps[propName]
-      );
+    if(extendedPropsToUpdate) {
+      for (let index = 0; index < extendedPropsToUpdate.length; index++) {
+        const propName = extendedPropsToUpdate[index];
+        existingEvent.setExtendedProp(
+          propName,
+          updatedEventData.extendedProps[propName]
+        );
+      }
     }
   };
 
   const removeEventInCalendar = (eventId) => {
-    toast({ message: "Event Removed", type: "success" });
     calendarApi.getEventById(eventId).remove();
   };
 
@@ -82,7 +84,7 @@ export default function userCalendar() {
       title,
       start,
       end,
-      extendedProps: { calendar, guests, location, description },
+      extendedProps: { calendar, appointment, guests, location, description },
       allDay,
     } = eventApi;
 
@@ -91,6 +93,7 @@ export default function userCalendar() {
       title,
       start,
       end,
+      appointment,
       extendedProps: {
         calendar,
         guests,
@@ -109,29 +112,28 @@ export default function userCalendar() {
     // });
   };
 
-  const updateEvent = (eventData) => {
-    console.log("c actualiza", eventData);
-    const waos = false;
-    if (waos)
-      store
-        .dispatch("calendar/updateEvent", { event: eventData })
-        .then((response) => {
-          const updatedEvent = response.data.event;
+  const updateEvent = async (eventData) => {
+    const data = {
+      user_id: eventData.appointment.user_id,
+      date: formatDate(eventData.start),
+      appointment_state_id: eventData.appointment.appointment_state_id,
+      status: eventData.appointment.status,
+  }
+    const updatedEvent = await apmntService.editAppointments(data, eventData.id);
 
-          const propsToUpdate = ["id", "title", "url"];
-          const extendedPropsToUpdate = [
-            "calendar",
-            "guests",
-            "location",
-            "description",
-          ];
+    const propsToUpdate = ["id", "title", "url"];
+    // const extendedPropsToUpdate = [
+    //   "calendar",
+    //   "guests",
+    //   "location",
+    //   "description",
+    // ];
 
-          updateEventInCalendar(
-            updatedEvent,
-            propsToUpdate,
-            extendedPropsToUpdate
-          );
-        });
+    updateEventInCalendar(
+      updatedEvent.data,
+      propsToUpdate,
+      // extendedPropsToUpdate
+    );
   };
 
   const removeEvent = () => {
@@ -175,7 +177,7 @@ export default function userCalendar() {
         title: app.user.full_name,
         start: new Date(app.date),
         end: increaseHourByOne(app.date),
-        color: getRandomColor()
+        color: getRandomColor(),
       };
     });
     return newData;
@@ -187,44 +189,6 @@ export default function userCalendar() {
     const response = await apmntService.getAppointments(25);
     const newData = remakeAppointments(response.data.data);
     successCallback(newData);
-    console.log(newData);
-    // successCallback([
-    //   {
-    //     allDay: true,
-    //     id: "waos",
-    //     title: "all dei",
-    //     start: "2024-05-17 11:00:00",
-    //     end: "2024-05-18 10:00:00",
-    //   },
-    //   {
-    //     id: "waos",
-    //     title: "super waos",
-    //     start: "2024-05-17 12:00:00",
-    //     end: "2024-05-18 10:00:00",
-    //   },
-    //   {
-    //     id: "waos",
-    //     title: "super waos",
-    //     start: "2024-05-17 13:00:00",
-    //     end: "2024-05-18 10:00:00",
-    //   },
-    //   {
-    //     id: "waos",
-    //     title: "super waos",
-    //     start: "2024-05-17 14:00:00",
-    //     end: "2024-05-18 10:00:00",
-    //   },
-    // ]);
-    // store
-    //   .dispatch("calendar/fetchEvents", {
-    //     calendars: selectedCalendars.value,
-    //   })
-    //   .then((response) => {
-    //     successCallback(response.data);
-    //   })
-    //   .catch(() => {
-    //     toast({ message: "Error fetching calendar events", type: "error" });
-    //   });
   };
 
   const calendarOptions = ref({
@@ -272,7 +236,6 @@ export default function userCalendar() {
     },
     eventClick({ event: clickedEvent }) {
       event.value = grabEventDataFromEventApi(clickedEvent);
-
       isModalActive.value = !isModalActive.value;
     },
 

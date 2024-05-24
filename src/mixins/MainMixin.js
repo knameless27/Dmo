@@ -11,8 +11,8 @@ export const validatePhone = (phone) => {
   return phone;
 };
 
-export const formatDate = (d) => {
-  const date = new Date(d)
+export const formatDate = (d, time = false) => {
+  const date = d instanceof Date ? d : new Date(d);
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0"); // Meses van de 0 a 11
   const day = String(date.getDate()).padStart(2, "0");
@@ -20,5 +20,6 @@ export const formatDate = (d) => {
   const minutes = String(date.getMinutes()).padStart(2, "0");
   const seconds = String(date.getSeconds()).padStart(2, "0");
 
+  if (time) return `${year}-${month}-${day} ${time}:${seconds}`;
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 };

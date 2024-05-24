@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import Cookies from "js-cookie";
 
 const defaultValue = {
   user: {
@@ -48,3 +49,31 @@ export const userCreds = defineStore({
     },
   },
 });
+
+const TOKEN_KEY = process.env.VUE_APP_TOKEN_KEY;
+
+export function getToken() {
+  return Cookies.get(TOKEN_KEY);
+}
+export function getUser() {
+  return JSON.parse(localStorage.getItem("user_data"));
+}
+
+export function setToken(data) {
+  const token = data.token;
+  delete data.token;
+  const newData = {
+    ...data,
+  };
+  localStorage.setItem("user_data", JSON.stringify(newData));
+  Cookies.set(TOKEN_KEY, token, {
+    secure: true,
+    httpOnly: false,
+    sameSite: "Strict",
+  });
+}
+
+export function removeCreds() {
+  Cookies.remove(TOKEN_KEY);
+  localStorage.clear();
+}

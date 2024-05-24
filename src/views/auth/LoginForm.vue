@@ -55,10 +55,9 @@ import MainCard from "components/MainCard.vue"
 import MainInput from "components/MainInput.vue"
 import MainLoader from "@/components/MainLoader.vue"
 import auth from "api/auth/index.js"
-import { userCreds } from "auth_store/main.js"
+import { setToken } from "auth_store/main.js"
 import { Form } from 'vee-validate';
 import { validatePhone } from "mix/MainMixin.js"
-import pinia from "core/pinia.js";
 
 export default {
     components: {
@@ -80,7 +79,6 @@ export default {
             },
             login: true,
             loading: false,
-            Store: userCreds(pinia)
         }
     },
     methods: {
@@ -102,7 +100,7 @@ export default {
                 this.$toast.open({ message, type: status });
                 this.loading = !this.loading
                 if (!data.original) return this.$toast.open({ message: "unexpected error", type: "error" })
-                this.Store.newCreds(data.original)
+                setToken(data.original)
                 this.$router.push('/book_appointment')
             }).catch((e) => {
                 console.log(e);

@@ -37,12 +37,12 @@ export default {
       // ----- UI ----- //
       isEventHandlerSidebarActive,
     } = useCalendar()
-
+    
     fetchEvents()
 
     watch(isModalActive, () => {
       emit("dayData", event)
-      emit("isModalActive", isModalActive.value)
+      emit("isModalActive", {isActive: isModalActive.value, event})
     })
 
     return {
